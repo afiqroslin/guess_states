@@ -33,6 +33,7 @@ while game_is_on:
     answer = screen.textinput(f"{len(correct_answer)}/{len(state)}", "Guess any states: ").title()
     # print(answer)
 
+    #  check if answer is in all state list. if it exists, then print answer on the screen at its x,y coordinate
     if answer in state:
         t = turtle.Turtle()
         t.penup()
@@ -43,7 +44,20 @@ while game_is_on:
         correct_answer.append(answer)
         # print(correct_answer)
 
+    # if all states guessed correctly, break loop and end the game
     if len(correct_answer) == len(state):
-        break
+        game_is_on = False
+
+    # if player give up on guessing state, exit game and create csv file of missing states
+    if answer == "Exit":
+        missing_state = []
+        for s in state:
+            if s not in correct_answer:
+                missing_state.append(s)
+        print(missing_state)
+        new_data = pd.DataFrame(missing_state)
+        new_data.to_csv('missing_state')
+        game_is_on = False
+
 
 screen.exitonclick()
